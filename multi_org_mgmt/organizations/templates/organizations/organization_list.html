@@ -1,0 +1,54 @@
+{% extends 'organizations/base.html' %}
+
+{% block title %}Organizations{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Organizations</h2>
+        {% if user.is_main_org_admin %}
+            <a href="{% url 'organization-create' %}" class="btn btn-primary">
+                Add Organization
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Type</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for organization in organizations %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'organization-users' organization.id %}">
+                                {{ organization.name }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ organization.created_at|date:"M d, Y" }}
+                        </td>
+                        <td>
+                            <a href="{% url 'organization-edit' organization.id %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </a>
+                            <a href="{% url 'organization-delete' organization.id %}" 
+                               class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
