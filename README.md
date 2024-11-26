@@ -1,149 +1,247 @@
-Django Multi-Organization Management Project
+Django Multi-Organization Management System
+📌 Table of Contents
+1. Project Overview
+2. System Requirements
+3. Installation Guide
+4. Project Setup
+5. Running the Application
+6. User Roles and Access
+7. Troubleshooting
+8. Advanced Configuration
 
-Project Overview
+🌟 Project Overview
+What is this Project?
+The Django Multi-Organization Management System is a web application designed to help
+organizations manage users, roles, and access controls efficiently. Whether you're a small
+startup or a large enterprise, this system provides a flexible solution for managing multiple
+organizations within a single platform.
 
-This project is a Django-based web application designed to manage multiple organizations, their users, and user roles. The system provides role-based access control for managing users within organizations.
+Key Features
+-🔒 Role-Based Access Control
+- 👥 Multi-Organization Support
+- 📊 User Management
+- 🔄 Easy User Data Import/Export
+- 🛡 Secure Authentication
 
-Features
+💻 System Requirements
+Minimum Requirements
+- Operating System: Windows, macOS, or Linux
+- Python: Version 3.8 or higher
+- Disk Space: 500 MB free
+- RAM: 4 GB minimum (8 GB recommended)
 
- 1. Multi-organization support with role-based access control.
- 2. Custom user model with extended fields for organizations and roles.
- 3. Admin interface with advanced filtering and role assignment.
- 4. User-friendly templates for managing users and organizations.
- 5. Import/export functionality for user data using django-import-export.
+Required Software
+1. Python 3.8+
+2. pip (Python Package Installer)
+3. Git
+4. Virtual Environment tool (venv recommended)
 
-Project Structure
-multi_org_mgmt/
-├── manage.py
-├── multi_org_mgmt/
-│ ├── __init__.py
-│ ├── asgi.py
-│ ├── settings.py
-│ ├── urls.py
-│ ├── wsgi.py
-├── organizations/
-│ ├── __init__.py
-│ ├── admin.py
-│ ├── apps.py
-│ ├── models.py
-│ ├── backends.py
-│ ├── mixins.py
-│ ├── tests.py
-│ ├── urls.py
-│ ├── views.py
-│ ├── forms.py
-└── templates/
-    ├── organization/
-        ├── organization_confirm_delete.html
-        ├── organization_form.html
-        ├── organization_list.html
-        ├── role_assignment.html
-        ├── user_confirm_delete.html
-        ├── user_form.html
-        ├── user_list.html
-    ├── registration/
-        ├── login.html
+🔧 Installation Guide
+Step 1: Prepare Your Environment
+1. Install Python
+- Download from official Python website: https://www.python.org/downloads/
+- Ensure "Add Python to PATH" is checked during installation
+- Verify installation by running in terminal/command prompt:
+```bash
+python --version
+pip --version
+```
 
-Customizations
+2. Install Git
+- Download from: https://git-scm.com/downloads
+- Verify installation:
+```bash
+git --version
+```
 
- 1. Custom User Model:
- • Extended to include organization and role fields.
- • Allows assigning users to specific organizations and roles.
- 2. Admin Panel Enhancements:
- • Customized UserAdmin to display organization and role information.
- • Added filtering options for organization and role in the admin panel.
- 3. Import/Export Functionality:
- • Integrated django-import-export to handle user data import/export.
- • Configured CustomUserResource in resources.py for managing user data.
+Step 2: Clone the Project
+```bash
+#Open terminal/command prompt
+git clone https://github.com/Nitishgithub2005/Multi
+_
+org_
+mng.git
+cd multi-org-management
+```
 
-Assumptions
+Step 3: Set Up Virtual Environment
+```bash
+# Create virtual environment
+python -m venv venv
+Activate virtual environment
+On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
+```
 
- 1. Each user belongs to a single organization and has one role.
- 2. Only admins can add/edit users and assign roles.
- 3. The django-import-export package is used for managing bulk user data.
-
-Setting Up and Running the Project Locally
-Prerequisites
-
- 1. Python 3.8 or higher
- 2. pip (Python package manager)
- 3. Virtual environment tool (e.g., venv or virtualenv)
-
-Setup Instructions
-1. Clone the Repository:
-git clone <repository_url>
-cd multi_org_mgmt
-
- 2. Create and Activate a Virtual Environment:
-python3 -m venv env
-source env/bin/activate   # On Windows: env\Scripts\activate
-
- 3. Install Dependencies:
+Step 4: Install Dependencies
+```bash
+# Upgrade pip
+pip install --upgrade pip
+# Install project dependencies
 pip install -r requirements.txt
-
- 4. Install django-import-export:
+# Install additional required package
 pip install django-import-export
+```
 
- 5. Add import_export to INSTALLED_APPS:
-Update INSTALLED_APPS in multi_org_mgmt/settings.py:
-INSTALLED_APPS = [
-    # Other apps
-    'import_export',
+🚀 Project Setup
+
+Database Configuration
+1. Apply Migrations:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+2. Create Superuser(A superuser has already been provided by me below, so this step is
+optional):
+```bash
+python manage.py createsuperuser
+```
+
+Follow the prompts to create an admin account
+3.Update Settings
+Open
+`
+multi
+_
+org_
+mgmt/settings.py
+`
+```
+python
+INSTALLED
+_
+APPS = [
+# Other apps...
+'import
+_
+export'
+,
+and ensure
+`import
+_
+export` is in
+`INSTALLED
+APPS`
+:
+_
 ]
+```
+🌐 Running the Application
+```bash
+# Start development server
+python manage.py runserver
+```
 
- 6. Apply Migrations:
-python3 manage.py makemigrations
-python3 manage.py migrate
+🔗 Access the application:
+- Local URL: http://127.0.0.1:8000
+- Admin Pane: http://127.0.0.1:8000/admin
 
- 7. Create a Superuser:
-python3 manage.py createsuperuser
-
-
- 8. Run the Development Server:
-python3 manage.py runserver 
-
- Usage Instructions
-
-Admin Credentials
-
- 1. Superadmin:
- • Username: mainadmin
- • Email: main@gmail.com
- • Password: admin@123
-
-Department Users
+🔐 User Roles and Access
+Default User Credentials
+Superadmin
+- Username:mainadmin
+- Password:admin@123
 
 IT Department
+1. Admin
+- Username:person1
+- Password:nitish@123
 
- • Admin:
- • Username: person1
- • Password: nitish@123
+2. Editor
+- Username:editor1
+- Password:nitish@123
 
- • Editor:
- • Username: editor1
- • Password: nitish@123
-
- • Viewer:
- • Username: viewer1
- • Password: nitish@123
+3. Viewer
+- Username:viewer1
+- Password:nitish@123
 
 Research Department
+1. Admin
+- Username:person2
+- Password:nitish@123
 
- • Admin:
- • Username: person2
- • Password: nitish@123
+2.Editor
+- Username:editor2
+- Password:nitish@123
 
- • Editor:
- • Username: editor2
- • Password: nitish@123
+3. Viewer
+- Username:viewer2
+- Password:nitish@123
 
- • Viewer:
- • Username: viewer2
- • Password: nitish@123
+Role Permissions
+- Admin: Full system access, can add/edit users and organizations
+- Editor: Can modify limited user and organizational data
+- Viewer: Read-only access to system information
 
+🛠 Troubleshooting
+Common Issues & Solutions
+1. Dependency Conflicts
+- Ensure you're in the virtual environment
+- Update pip:
+`
+pip install --upgrade pip
+`
+- Recreate virtual environment if persistent issues occur
+2. Migration Errors
+- Delete existing migration files in
+`
+organizations/migrations/`
+- Run
+`
+python manage.py makemigrations
+`
+- Then
+`
+python manage.py migrate
+`
+3. Import/Export Problems
+- Verify data format matches expected schema
+- Check django-import-export documentation
+🔬 Advanced Configuration
+Performance Optimization
+- Use
+`
+python manage.py check --deploy
+` for production readiness check
+- Configure static file handling
+- Set up proper logging
 
-Additional Notes
+🤝 Contributing
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
+📋 Project Structure
+multi
+_
+org_
+mgmt/
+│
+├── manage.py
+├── multi
+_
+ org_
+mgmt/
+│ ├── settings.py
+│ ├── urls.py
+│ └── ...
+│
+├── organizations/
+│ ├── models.py
+│ ├── admin.py
+│ ├── views.py
+│ └── ...
+│
+└── templates/
+├── base.html
+├── organization
+_
+└── user
+list.html
+list.html
 
- • Make sure to restart the server after installing new packages or making significant changes to the code.
- • Use the admin panel for managing users and organizations efficiently.
- • The import/export feature can be accessed through the admin panel for bulk operations on user data.
+📞 Support
+For issues or questions, please open a GitHub issue or contact nitishmaladakar@gmail.com.
