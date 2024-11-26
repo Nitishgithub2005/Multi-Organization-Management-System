@@ -142,14 +142,14 @@ python manage.py runserver
 🔐 User Roles and Access
 Default User Credentials
 
-Superadmin
+1. SuperAdmin
 - Username:
+`
+mainadmin`
 - Password:
 `
-mainadmin
-`
-`
 admin@123`
+
 IT Department
 1. Admin
 - Username:
@@ -160,9 +160,9 @@ person1`
 nitish@123`
 2. Editor
 - Username:
-- Password:
 `
 editor1`
+- Password:
 `
 nitish@123`
 3. Viewer
@@ -172,6 +172,7 @@ viewer1`
 - Password:
 `
 nitish@123`
+
 Research Department
 1. Admin
 - Username:
@@ -180,6 +181,7 @@ person2`
 - Password:
 `
 nitish@123`
+
 2.Editor
 - Username:
 `
@@ -189,12 +191,12 @@ editor2`
 nitish@123`
 3. Viewer
 - Username:
-- Password:
 `
 viewer2`
+- Password:
 `
 nitish@123`
-  `
+
 
 Role Permissions
 - Admin: Full system access, can add/edit users and organizations
