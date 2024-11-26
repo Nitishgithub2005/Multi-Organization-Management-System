@@ -141,35 +141,60 @@ python manage.py runserver
 
 🔐 User Roles and Access
 Default User Credentials
-Superadmin
-- Username:mainadmin
-- Password:admin@123
 
+Superadmin
+- Username:
+- Password:
+`
+mainadmin
+`
+`
+admin@123`
 IT Department
 1. Admin
-- Username:person1
-- Password:nitish@123
-
+- Username:
+`
+person1`
+- Password:
+`
+nitish@123`
 2. Editor
-- Username:editor1
-- Password:nitish@123
-
+- Username:
+- Password:
+`
+editor1`
+`
+nitish@123`
 3. Viewer
-- Username:viewer1
-- Password:nitish@123
-
+- Username:
+`
+viewer1`
+- Password:
+`
+nitish@123`
 Research Department
 1. Admin
-- Username:person2
-- Password:nitish@123
-
+- Username:
+`
+person2`
+- Password:
+`
+nitish@123`
 2.Editor
-- Username:editor2
-- Password:nitish@123
-
+- Username:
+`
+editor2`
+- Password:
+`
+nitish@123`
 3. Viewer
-- Username:viewer2
-- Password:nitish@123
+- Username:
+- Password:
+`
+viewer2`
+`
+nitish@123`
+  `
 
 Role Permissions
 - Admin: Full system access, can add/edit users and organizations
@@ -214,34 +239,6 @@ python manage.py check --deploy
 2. Create a new branch
 3. Make your changes
 4. Submit a pull request
-📋 Project Structure
-multi
-_
-org_
-mgmt/
-│
-├── manage.py
-├── multi
-_
- org_
-mgmt/
-│ ├── settings.py
-│ ├── urls.py
-│ └── ...
-│
-├── organizations/
-│ ├── models.py
-│ ├── admin.py
-│ ├── views.py
-│ └── ...
-│
-└── templates/
-├── base.html
-├── organization
-_
-└── user
-list.html
-list.html
 
 📞 Support
 For issues or questions, please open a GitHub issue or contact nitishmaladakar@gmail.com.
