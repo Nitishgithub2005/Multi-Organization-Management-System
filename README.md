@@ -1,3 +1,4 @@
+video-link: https://shorturl.at/4p2tE
 Django Multi-Organization Management System
 📌 Table of Contents
 1. Project Overview
