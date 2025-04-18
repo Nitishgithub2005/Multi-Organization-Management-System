@@ -16,20 +16,23 @@ IT Department
 1. Admin
 - Username:
 `
-person1`
+newad`
 - Password:
 `
 nitish@123`
+
 2. Editor
 - Username:
 `
 editor1`
 - Password:
+`
 nitish@123`
+
 3. Viewer
 - Username:
 `
-viewer1`
+viewer11`
 - Password:
 `
 nitish@123`
@@ -53,7 +56,7 @@ nitish@123`
 3. Viewer
 - Username:
 `
-viewer2`
+alice`
 - Password:
 `
 nitish@123`
