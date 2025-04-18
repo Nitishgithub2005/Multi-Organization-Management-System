@@ -1,4 +1,4 @@
-video-link: https://shorturl.at/4p2tE
+video-link: https://drive.google.com/file/d/1o4HM78ouC0FHYkqKfzLDt78Pym3Dicaz/view?usp=sharing
 
 Django Multi-Organization Management System
 
