@@ -1,4 +1,30 @@
 website link : https://nitishmaladakar.pythonanywhere.com
+	(login details are given below)
+🔐 User Roles and Access
+Default User Credentials
+
+1. SuperAdmin
+- Username:
+`
+mainadmin`
+- Password:
+`
+admin@123`
+
+IT Department
+1. Admin
+- Username:
+`
+person1`
+- Password:
+`
+nitish@123`
+2. Editor
+- Username:
+`
+editor1`
+- Password:
+`
 
 Django Multi-Organization Management System
 
