@@ -1,4 +1,4 @@
-video-link: https://drive.google.com/file/d/1o4HM78ouC0FHYkqKfzLDt78Pym3Dicaz/view?usp=sharing
+website link : https://nitishmaladakar.pythonanywhere.com
 
 Django Multi-Organization Management System
 
@@ -72,7 +72,7 @@ Step 3: Set Up Virtual Environment
 # Create virtual environment
 python -m venv venv
 Activate virtual environment
-On Windows
+# On Windows
 venv\Scripts\activate
 # On macOS/Linux
 source venv/bin/activate
@@ -244,6 +244,7 @@ python manage.py check --deploy
 2. Create a new branch
 3. Make your changes
 4. Submit a pull request
+
 
 📞 Support
 For issues or questions, please open a GitHub issue or contact nitishmaladakar@gmail.com.
