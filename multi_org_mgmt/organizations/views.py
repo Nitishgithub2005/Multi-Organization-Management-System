@@ -14,7 +14,7 @@ class OrganizationListView(LoginRequiredMixin, OrganizationRequiredMixin, RoleRe
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_superuser:  # Add this condition
+        if user.is_superuser:
             return Organization.objects.all()
         if user.is_main_org_admin():
             return Organization.objects.all()
@@ -27,8 +27,7 @@ class OrganizationEditView(LoginRequiredMixin, UserPassesTestMixin, Organization
     success_url = reverse_lazy('organization-list')
 
     def test_func(self):
-        return (self.request.user.is_superuser or 
-                self.request.user.is_organization_admin())
+        return self.request.user.is_superuser or self.request.user.is_organization_admin()
 
     def handle_no_permission(self):
         messages.error(self.request, 'You do not have permission to edit organizations.')
@@ -40,8 +39,7 @@ class OrganizationDeleteView(LoginRequiredMixin, UserPassesTestMixin, Organizati
     success_url = reverse_lazy('organization-list')
 
     def test_func(self):
-        return (self.request.user.is_superuser or 
-                self.request.user.is_organization_admin())
+        return self.request.user.is_superuser or self.request.user.is_organization_admin()
 
     def handle_no_permission(self):
         messages.error(self.request, 'You do not have permission to delete organizations.')
@@ -73,13 +71,13 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequired
             return CustomUser.objects.filter(organization=user.organization)
         elif user.is_editor():
             return CustomUser.objects.filter(organization=user.organization)
+        elif user.is_viewer():
+            return CustomUser.objects.filter(organization=user.organization)
         return CustomUser.objects.none()
 
     def test_func(self):
         user = self.request.user
-        return (user.is_superuser or 
-                user.is_organization_admin() or 
-                user.is_editor())
+        return user.is_superuser or user.is_organization_admin() or user.is_editor() or user.is_viewer()
 
 class UserCreateView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequiredMixin, CreateView):
     model = CustomUser
@@ -87,20 +85,26 @@ class UserCreateView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequir
     template_name = 'organizations/user_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('organization-users', 
-                          kwargs={'organization_id': self.request.user.organization.id})
+        return reverse_lazy('organization-users', kwargs={'organization_id': self.request.user.organization.id})
 
     def test_func(self):
         user = self.request.user
-        return user.is_organization_admin() or user.is_editor()
+        # Allow superuser, org admin, and editor to create users
+        return user.is_superuser or user.is_organization_admin() or user.is_editor()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['organization'] = self.request.user.organization
+        # Superuser might not have an associated organization
+        if self.request.user.is_superuser:
+            kwargs['organization'] = None
+        else:
+            kwargs['organization'] = self.request.user.organization
         return kwargs
 
     def form_valid(self, form):
-        form.instance.organization = self.request.user.organization
+        # Assign organization only if user is not superuser
+        if not self.request.user.is_superuser:
+            form.instance.organization = self.request.user.organization
         return super().form_valid(form)
 
 class RoleAssignmentView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequiredMixin, UpdateView):
@@ -109,16 +113,29 @@ class RoleAssignmentView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRe
     template_name = 'organizations/role_assignment.html'
 
     def get_success_url(self):
-        return reverse_lazy('organization-users', 
-                          kwargs={'organization_id': self.request.user.organization.id})
+        return reverse_lazy('organization-users', kwargs={'organization_id': self.request.user.organization.id})
 
     def test_func(self):
-        return (self.request.user.is_organization_admin() and
-                self.get_object().organization == self.request.user.organization)
+        current_user = self.request.user
+        target_user = self.get_object()
+
+        if current_user.is_superuser:
+            return True  # Super admin can assign roles to any user
+
+        if current_user.is_editor() and target_user.is_organization_admin():
+            return False
+
+        if current_user.is_editor():
+            return target_user.organization == current_user.organization
+
+        if current_user.is_organization_admin():
+            return target_user.organization == current_user.organization
+
+        return False
 
     def handle_no_permission(self):
-        messages.error(self.request, 'You do not have permission to assign roles.')
-        return redirect('organization-list')
+        messages.error(self.request, 'You do not have permission to assign or change this user\'s role.')
+        return redirect('organization-users', organization_id=self.request.user.organization.id)
 
 class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequiredMixin, UpdateView):
     model = CustomUser
@@ -126,26 +143,30 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequir
     template_name = 'organizations/user_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('organization-users', 
-                          kwargs={'organization_id': self.object.organization.id})
+        return reverse_lazy('organization-users', kwargs={'organization_id': self.object.organization.id})
 
     def test_func(self):
-        return (self.request.user.is_superuser or
-                (self.request.user.is_organization_admin() and 
-                 self.get_object().organization == self.request.user.organization))
+        if self.request.user.is_superuser:
+            return True  # Super admin can update any user
+        return (
+            self.request.user.is_organization_admin() and
+            self.get_object().organization == self.request.user.organization
+        )
 
 class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequiredMixin, DeleteView):
     model = CustomUser
     template_name = 'organizations/user_confirm_delete.html'
 
     def get_success_url(self):
-        return reverse_lazy('organization-users', 
-                          kwargs={'organization_id': self.object.organization.id})
+        return reverse_lazy('organization-users', kwargs={'organization_id': self.object.organization.id})
 
     def test_func(self):
-        return (self.request.user.is_superuser or
-                (self.request.user.is_organization_admin() and 
-                 self.get_object().organization == self.request.user.organization))
+        if self.request.user.is_superuser:
+            return True  # Super admin can delete any user
+        return (
+            self.request.user.is_organization_admin() and
+            self.get_object().organization == self.request.user.organization
+        )
 
 class OrganizationUsersView(LoginRequiredMixin, OrganizationRequiredMixin, ListView):
     model = CustomUser
@@ -155,13 +176,15 @@ class OrganizationUsersView(LoginRequiredMixin, OrganizationRequiredMixin, ListV
     def get_queryset(self):
         organization_id = self.kwargs['organization_id']
         user = self.request.user
-        
-        if user.is_main_org_admin():
+
+        if user.is_superuser or user.is_main_org_admin():
             return CustomUser.objects.filter(organization_id=organization_id)
-        elif (user.organization and 
-              user.organization.id == organization_id and 
-              (user.is_organization_admin() or user.is_editor())):
+
+        elif (user.organization and
+              user.organization.id == organization_id and
+              (user.is_organization_admin() or user.is_editor() or user.is_viewer())):
             return CustomUser.objects.filter(organization_id=organization_id)
+
         return CustomUser.objects.none()
 
     def get_context_data(self, **kwargs):
