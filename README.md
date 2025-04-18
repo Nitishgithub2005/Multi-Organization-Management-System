@@ -19,6 +19,17 @@ organizations manage users, roles, and access controls efficiently. Whether you'
 startup or a large enterprise, this system provides a flexible solution for managing multiple
 organizations within a single platform.
 
+What I Learned from This Project
+	•	Set up and used a custom user model in Django.
+	•	Implemented Role-Based Access Control (RBAC) using custom roles like Super Admin, Org Admin, Editor, and Viewer.
+	•	Built views using class-based views with permission checks.
+	•	Created and used custom mixins to manage access by organization.
+	•	Filtered data based on the logged-in user’s organization and role.
+	•	Designed forms with dynamic field behavior (e.g. limiting organization choices).
+	•	Handled common Django issues like 403, 500 errors, and NoReverseMatch.
+	•	Used template inheritance and Bootstrap for clean UI.
+	•	Gained experience in building a multi-organization system.
+
 Key Features
 -🔒 Role-Based Access Control
 - 👥 Multi-Organization Support
