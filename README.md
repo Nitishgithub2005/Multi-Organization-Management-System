@@ -58,6 +58,7 @@ viewer2`
 `
 nitish@123`
 `
+
 Role Permissions
 - Admin: Full system access, can add/edit users and organizations
 - Editor: Can add user and change roles other than admin' role
@@ -216,69 +217,8 @@ python manage.py runserver
 - Local URL: http://127.0.0.1:8000
 - Admin Pane: http://127.0.0.1:8000/admin
 
-🔐 User Roles and Access
-Default User Credentials
-
-1. SuperAdmin
-- Username:
-`
-mainadmin`
-- Password:
-`
-admin@123`
-
-IT Department
-1. Admin
-- Username:
-`
-person1`
-- Password:
-`
-nitish@123`
-2. Editor
-- Username:
-`
-editor1`
-- Password:
-`
-nitish@123`
-3. Viewer
-- Username:
-`
-viewer1`
-- Password:
-`
-nitish@123`
-
-Research Department
-1. Admin
-- Username:
-`
-person2`
-- Password:
-`
-nitish@123`
-
-2.Editor
-- Username:
-`
-editor2`
-- Password:
-`
-nitish@123`
-3. Viewer
-- Username:
-`
-viewer2`
-- Password:
-`
-nitish@123`
 
 
-Role Permissions
-- Admin: Full system access, can add/edit users and organizations
-- Editor: Can modify limited user and organizational data
-- Viewer: Read-only access to system information
 
 🛠 Troubleshooting
 Common Issues & Solutions
