@@ -25,8 +25,44 @@ nitish@123`
 `
 editor1`
 - Password:
+nitish@123`
+3. Viewer
+- Username:
 `
+viewer1`
+- Password:
+`
+nitish@123`
 
+Research Department
+1. Admin
+- Username:
+`
+person2`
+- Password:
+`
+nitish@123`
+
+2.Editor
+- Username:
+`
+editor2`
+- Password:
+`
+nitish@123`
+3. Viewer
+- Username:
+`
+viewer2`
+- Password:
+`
+nitish@123`
+`
+Role Permissions
+- Admin: Full system access, can add/edit users and organizations
+- Editor: Can add user and change roles other than admin' role
+- Viewer: Read-only access to system information
+  
 Django Multi-Organization Management System
 
 📌 Table of Contents
