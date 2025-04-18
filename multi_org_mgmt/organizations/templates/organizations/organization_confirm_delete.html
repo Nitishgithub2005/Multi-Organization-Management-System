@@ -1,11 +1,27 @@
 {% extends 'organizations/base.html' %}
 
 {% block content %}
-  <h2>Are you sure you want to delete the organization "{{ object.name }}"?</h2>
-  
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Confirm Delete</button>
-    <a href="{% url 'organization-list' %}" class="btn btn-secondary">Cancel</a>
-  </form>
+<div class="d-flex justify-content-center">
+  <div class="card p-4 shadow-sm" style="max-width: 500px; width: 100%;">
+    <div class="text-center mb-3">
+      <i class="fas fa-exclamation-triangle text-danger" style="font-size: 2.5rem;"></i>
+      <h4 class="mt-3 text-danger">Confirm Deletion</h4>
+    </div>
+
+    <p class="text-center">
+      Are you sure you want to permanently delete the organization
+      <strong>"{{ object.name }}"</strong>?
+    </p>
+
+    <form method="post" class="d-flex justify-content-center gap-3 mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">
+        <i class="fas fa-trash-alt me-1"></i> Confirm Delete
+      </button>
+      <a href="{% url 'organization-list' %}" class="btn btn-secondary">
+        <i class="fas fa-times me-1"></i> Cancel
+      </a>
+    </form>
+  </div>
+</div>
 {% endblock %}
