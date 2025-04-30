@@ -8,9 +8,11 @@ class OrganizationForm(forms.ModelForm):
         fields = ['name', 'address']
 
 class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)  # Add email field explicitly
+
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = UserCreationForm.Meta.fields + ('organization', 'role')
+        fields = UserCreationForm.Meta.fields + ('email', 'organization', 'role')
 
     def __init__(self, *args, **kwargs):
         organization = kwargs.pop('organization', None)
@@ -24,7 +26,6 @@ class CustomUserCreationForm(UserCreationForm):
 
         # If the current user is an editor, restrict role choices
         if user and user.role.name == 'EDITOR':
-            # Remove the "ADMIN" role from the choices
             self.fields['role'].queryset = Role.objects.exclude(name='ADMIN')
 
 class RoleAssignmentForm(forms.ModelForm):

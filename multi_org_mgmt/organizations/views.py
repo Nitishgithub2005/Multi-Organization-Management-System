@@ -107,6 +107,35 @@ class UserCreateView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequir
             form.instance.organization = self.request.user.organization
         return super().form_valid(form)
 
+# class RoleAssignmentView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequiredMixin, UpdateView):
+#     model = CustomUser
+#     form_class = RoleAssignmentForm
+#     template_name = 'organizations/role_assignment.html'
+
+#     def get_success_url(self):
+#         return reverse_lazy('organization-users', kwargs={'organization_id': self.request.user.organization.id})
+
+#     def test_func(self):
+#         current_user = self.request.user
+#         target_user = self.get_object()
+
+#         if current_user.is_superuser:
+#             return True  # ✅ Super admin can assign roles to any user
+
+#         if current_user.is_editor() and target_user.is_organization_admin():
+#             return False
+
+#         if current_user.is_editor():
+#             return target_user.organization == current_user.organization
+
+#         if current_user.is_organization_admin():
+#             return target_user.organization == current_user.organization
+
+#         return False
+
+#     def handle_no_permission(self):
+#         messages.error(self.request, 'You do not have permission to assign or change this user\'s role.')
+#         return redirect('organization-users', organization_id=self.request.user.organization.id)
 class RoleAssignmentView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequiredMixin, UpdateView):
     model = CustomUser
     form_class = RoleAssignmentForm
@@ -120,18 +149,28 @@ class RoleAssignmentView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRe
         target_user = self.get_object()
 
         if current_user.is_superuser:
-            return True  # Super admin can assign roles to any user
+            return True  # Super admin can assign roles to anyone
 
-        if current_user.is_editor() and target_user.is_organization_admin():
-            return False
-
+        # Editors cannot change role of admins
         if current_user.is_editor():
+            if target_user.is_organization_admin():
+                return False
             return target_user.organization == current_user.organization
 
         if current_user.is_organization_admin():
             return target_user.organization == current_user.organization
 
         return False
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        current_user = self.request.user
+
+        if not current_user.is_superuser and current_user.is_editor():
+            # Editors cannot assign 'ADMIN' role
+            form.fields['role'].queryset = Role.objects.exclude(name__iexact='ADMIN')
+
+        return form
 
     def handle_no_permission(self):
         messages.error(self.request, 'You do not have permission to assign or change this user\'s role.')
@@ -143,11 +182,28 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequir
     template_name = 'organizations/user_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('organization-users', kwargs={'organization_id': self.object.organization.id})
+        org = self.object.organization or self.request.user.organization
+        if org:
+            return reverse_lazy('organization-users', kwargs={'organization_id': org.id})
+        return reverse_lazy('dashboard')  # fallback if no organization
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+
+        if not self.request.user.is_superuser:
+            user.is_superuser = False
+            user.is_staff = False
+
+        # Keep organization same as request user's
+            if not user.organization:
+                user.organization = self.request.user.organization
+
+        user.save()
+        return super().form_valid(form)
 
     def test_func(self):
         if self.request.user.is_superuser:
-            return True  # Super admin can update any user
+            return True  #  Super admin can update any user
         return (
             self.request.user.is_organization_admin() and
             self.get_object().organization == self.request.user.organization
@@ -162,7 +218,7 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, OrganizationRequir
 
     def test_func(self):
         if self.request.user.is_superuser:
-            return True  # Super admin can delete any user
+            return True  # ✅ Super admin can delete any user
         return (
             self.request.user.is_organization_admin() and
             self.get_object().organization == self.request.user.organization
