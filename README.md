@@ -265,5 +265,5 @@ python manage.py check --deploy
 4. Submit a pull request
 
 
-📞 Support
+📞 Support:
 For issues or questions, please open a GitHub issue or contact nitishmaladakar@gmail.com.
